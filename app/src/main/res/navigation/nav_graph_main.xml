@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.conexaotradicao.app.ui.home.HomeFragment"
+        android:label="Eventos"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_eventDetail"
+            app:destination="@id/eventDetailFragment" />
+        <action
+            android:id="@+id/action_home_to_createEvent"
+            app:destination="@id/createEventFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createEventFragment"
+        android:name="com.conexaotradicao.app.ui.createevent.CreateEventFragment"
+        android:label="Novo Evento"
+        tools:layout="@layout/fragment_create_event" />
+
+    <fragment
+        android:id="@+id/eventDetailFragment"
+        android:name="com.conexaotradicao.app.ui.eventdetail.EventDetailFragment"
+        android:label="Detalhes do Evento"
+        tools:layout="@layout/fragment_event_detail">
+        <argument android:name="eventId" app:argType="string" />
+        <action
+            android:id="@+id/action_eventDetail_to_chat"
+            app:destination="@id/chatFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.conexaotradicao.app.ui.chat.ChatFragment"
+        android:label="Chat"
+        tools:layout="@layout/fragment_chat">
+        <argument android:name="eventId" app:argType="string" />
+        <argument android:name="producerId" app:argType="string" />
+        <argument android:name="producerName" app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.conexaotradicao.app.ui.profile.ProfileFragment"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profile_to_eventDetail"
+            app:destination="@id/eventDetailFragment" />
+    </fragment>
+
+</navigation>

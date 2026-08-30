@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Balão do Anfitrião (produtor do evento) quando ele é quem está vendo a própria
+     mensagem — mesmo formato de bg_bubble_sent.xml, cor verde escuro em vez de marrom. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/moss_green_dark" />
+    <corners
+        android:topLeftRadius="16dp"
+        android:topRightRadius="16dp"
+        android:bottomLeftRadius="16dp"
+        android:bottomRightRadius="4dp" />
+</shape>

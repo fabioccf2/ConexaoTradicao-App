@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Paleta terrosa definida na AA1: marrom café, verde musgo, bege -->
+    <color name="coffee_brown">#4A2E22</color>
+    <color name="coffee_brown_dark">#331F17</color>
+    <color name="moss_green">#6B7A4F</color>
+    <color name="moss_green_dark">#4E5A39</color>
+    <!-- Tom bem clarinho do verde musgo, só pra pintar o fundo do card de evento já
+         agendado (RF07) na Home sem perder o contraste do texto por cima. -->
+    <color name="moss_green_light">#E1EAD7</color>
+    <color name="beige">#F1E7D6</color>
+    <color name="beige_light">#FAF6EE</color>
+    <color name="beige_dark">#E3D5B8</color>
+
+    <color name="text_primary">#2B2118</color>
+    <color name="text_secondary">#6B5D4F</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <color name="star_gold">#D9A441</color>
+    <color name="error_red">#B3261E</color>
+    <color name="online_green">#3E8E5A</color>
+
+    <color name="background">@color/beige_light</color>
+    <color name="surface">@color/white</color>
+</resources>

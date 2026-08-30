@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="@color/coffee_brown"
+            android:contentDescription="Voltar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/event_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.ConexaoTradicao.Title"
+            android:textSize="22sp"
+            app:layout_constraintTop_toBottomOf="@id/btn_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Chapecó/SC" />
+
+        <TextView
+            android:id="@+id/event_subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textAppearance="@style/TextAppearance.ConexaoTradicao.Body"
+            app:layout_constraintTop_toBottomOf="@id/event_title"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="12 de setembro" />
+
+        <TextView
+            android:id="@+id/event_producer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textAppearance="@style/TextAppearance.ConexaoTradicao.Body"
+            android:textColor="@color/moss_green_dark"
+            app:layout_constraintTop_toBottomOf="@id/event_subtitle"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Sítio Boa Vista" />
+
+        <TextView
+            android:id="@+id/event_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/star_gold"
+            app:layout_constraintTop_toTopOf="@id/event_producer"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="★ 4.8" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/beige_dark"
+            app:layout_constraintTop_toBottomOf="@id/event_producer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/price_table_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/price_table_title"
+            android:textAppearance="@style/TextAppearance.ConexaoTradicao.Title"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cut_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@id/price_table_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_schedule"
+            style="@style/Widget.ConexaoTradicao.Button.Primary"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/btn_schedule"
+            app:layout_constraintTop_toBottomOf="@id/cut_list"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- RF07 — só aparece depois de já ter agendado (ver EventDetailViewModel.locationUnlocked,
+             reaproveitada como "já agendado?"); desfaz a participação. Some (GONE) enquanto não
+             agendou, então o "Chamar Produtor" logo abaixo sobe automaticamente pro lugar. -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_cancel_schedule"
+            style="@style/Widget.ConexaoTradicao.Button.Secondary"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/btn_cancel_schedule"
+            app:strokeColor="@color/error_red"
+            android:textColor="@color/error_red"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/btn_schedule"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_call_producer"
+            style="@style/Widget.ConexaoTradicao.Button.Secondary"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/btn_call_producer"
+            app:layout_constraintTop_toBottomOf="@id/btn_cancel_schedule"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_location"
+            style="@style/Widget.ConexaoTradicao.Button.Secondary"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/btn_location"
+            app:layout_constraintTop_toBottomOf="@id/btn_call_producer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- RF10 — só o produtor dono do evento vê, e só antes de já ter finalizado. -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_finalize_event"
+            style="@style/Widget.ConexaoTradicao.Button.Primary"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/btn_finalize_event"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/btn_location"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible" />
+
+        <!-- RF10 — fotos da carneação já realizada, visíveis pros dois lados (produtor e
+             compradores) depois que o evento é finalizado. -->
+        <TextView
+            android:id="@+id/photos_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/label_event_photos"
+            android:textAppearance="@style/TextAppearance.ConexaoTradicao.Title"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/btn_finalize_event"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
+
+        <HorizontalScrollView
+            android:id="@+id/photos_scroll"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scrollbars="none"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/photos_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:id="@+id/photos_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
+        </HorizontalScrollView>
+
+        <!-- RF10 — só o comprador vê, e só depois de finalizado e ainda sem avaliar. -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_rate_producer"
+            style="@style/Widget.ConexaoTradicao.Button.Primary"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/btn_rate_producer"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/photos_scroll"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible" />
+
+        <!-- RF10 — só o produtor vê, e só depois de finalizar o evento. -->
+        <TextView
+            android:id="@+id/participants_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/label_rate_participants"
+            android:textAppearance="@style/TextAppearance.ConexaoTradicao.Title"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/btn_rate_producer"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/participants_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="20dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/participants_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "455608861255",
+    "project_id": "conexao-e-tradicao",
+    "storage_bucket": "conexao-e-tradicao.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:455608861255:android:805dc17787cbdfd90e6762",
+        "android_client_info": {
+          "package_name": "com.conexaotradicao.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "455608861255-qb4rrfg41d0npps4u094qhe43ngjkddg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.conexaotradicao.app",
+            "certificate_hash": "b51194a5334524762e1d947e1f8ee352c23f11ea"
+          }
+        },
+        {
+          "client_id": "455608861255-ua339bu0vg42bmlcnkput4o0lqmbt964.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDuZe_Gk23zqRNXruGsH-__2DHiFjy4tE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "455608861255-ua339bu0vg42bmlcnkput4o0lqmbt964.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

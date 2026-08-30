@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingVertical="10dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/participation_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="@style/TextAppearance.ConexaoTradicao.Body"
+            tools:text="12/09/2026" />
+
+        <TextView
+            android:id="@+id/participation_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/moss_green_dark"
+            android:textStyle="bold"
+            tools:text="CONCLUIDO" />
+
+    </LinearLayout>
+
+    <!-- Cortes selecionados na hora de agendar (RF07) — pedido do usuário pra ficar visível
+         direto na lista, sem precisar abrir o evento pra lembrar o que reservou. -->
+    <TextView
+        android:id="@+id/participation_cuts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textAppearance="@style/TextAppearance.ConexaoTradicao.Body"
+        android:textColor="@color/text_secondary"
+        android:textSize="13sp"
+        tools:text="Picanha, Costela Ripa" />
+
+</LinearLayout>

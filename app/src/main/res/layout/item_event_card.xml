@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/surface"
+    app:strokeColor="@color/beige_dark"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/icon_card"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            app:cardCornerRadius="14dp"
+            app:cardBackgroundColor="@color/beige"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/event_animal_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="12dp"
+                app:tint="@color/coffee_brown"
+                android:contentDescription="@null" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Rótulo de texto embaixo do ícone (Gado/Porco) — deixa impossível confundir o
+             tipo de animal só de bater o olho, mesmo se o ícone sozinho não for claro o
+             bastante, ou se o evento tiver sido cadastrado com o tipo errado sem perceber. -->
+        <TextView
+            android:id="@+id/event_animal_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/icon_card"
+            app:layout_constraintStart_toStartOf="@id/icon_card"
+            app:layout_constraintEnd_toEndOf="@id/icon_card"
+            tools:text="Gado" />
+
+        <TextView
+            android:id="@+id/event_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textAppearance="@style/TextAppearance.ConexaoTradicao.Title"
+            android:textSize="16sp"
+            app:layout_constraintTop_toTopOf="@id/icon_card"
+            app:layout_constraintStart_toEndOf="@id/icon_card"
+            tools:text="12/09" />
+
+        <TextView
+            android:id="@+id/event_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textAppearance="@style/TextAppearance.ConexaoTradicao.Body"
+            app:layout_constraintTop_toBottomOf="@id/event_date"
+            app:layout_constraintStart_toEndOf="@id/icon_card"
+            tools:text="Chapecó/SC" />
+
+        <TextView
+            android:id="@+id/event_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/star_gold"
+            app:layout_constraintTop_toTopOf="@id/icon_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="★ 4.8" />
+
+        <TextView
+            android:id="@+id/event_producer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.ConexaoTradicao.Body"
+            android:textColor="@color/text_secondary"
+            app:layout_constraintTop_toBottomOf="@id/event_rating"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Sítio Boa Vista" />
+
+        <!-- RF10 — evento já finalizado pelo produtor (ver EventAdapter/HomeViewModel: o card
+             fica opaco e vai pro fim da lista, mas continua clicável pra abrir o Detalhe do
+             Evento — fotos/avaliação). -->
+        <TextView
+            android:id="@+id/event_finalized_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/label_event_finalized"
+            android:textColor="@color/moss_green_dark"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/event_producer"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/top_row_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="event_animal_label,event_city,event_producer,event_finalized_badge" />
+
+        <TextView
+            android:id="@+id/event_cuts"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.ConexaoTradicao.Body"
+            android:textColor="@color/moss_green_dark"
+            app:layout_constraintTop_toBottomOf="@id/top_row_barrier"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Picanha, Alcatra, Costela Ripa" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

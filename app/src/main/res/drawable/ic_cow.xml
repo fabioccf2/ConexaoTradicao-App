@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ícone de gado (RF03/AA1: "boi para carneamento de gado" nos cards de evento).
+     Chifres grandes e curvados pra cima são o traço que diferencia do porco mesmo em
+     tamanho pequeno (32dp no card). Silhueta única — recebe app:tint de quem usa. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M6,13 A6,6 0 1,0 18,13 A6,6 0 1,0 6,13 Z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M4.5,9 A1.8,1.8 0 1,0 8.1,9 A1.8,1.8 0 1,0 4.5,9 Z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M15.9,9 A1.8,1.8 0 1,0 19.5,9 A1.8,1.8 0 1,0 15.9,9 Z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M9,8 C7,6 5.5,3 6.5,1 C8,1.3 9,3.5 9.5,6 C9.8,7 9.6,7.6 9,8 Z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M15,8 C17,6 18.5,3 17.5,1 C16,1.3 15,3.5 14.5,6 C14.2,7 14.4,7.6 15,8 Z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M9.6,17.3 A2.4,2.4 0 1,0 14.4,17.3 A2.4,2.4 0 1,0 9.6,17.3 Z" />
+</vector>

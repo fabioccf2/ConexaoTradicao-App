@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Conexão &amp; Tradição</string>
+
+    <!-- Auth -->
+    <string name="login_title">Conexão &amp; Tradição</string>
+    <string name="login_subtitle">Do produtor rural para a sua mesa</string>
+    <string name="hint_email">E-mail</string>
+    <string name="hint_password">Senha</string>
+    <string name="btn_login">Entrar</string>
+    <string name="btn_register">Cadastrar</string>
+    <string name="btn_google">Continuar com Google</string>
+    <string name="label_no_account">Ainda não tem uma conta? Cadastre-se!</string>
+    <string name="label_has_account">Já tem uma conta? Faça login!</string>
+
+    <!-- Home -->
+    <string name="search_city_hint">Buscar por cidade</string>
+    <string name="search_product_hint">Buscar por corte/subproduto</string>
+    <string name="upcoming_events">Próximos eventos de carneamento</string>
+    <string name="empty_events">Nenhum evento encontrado por aqui ainda.</string>
+
+    <!-- Event detail -->
+    <string name="price_table_title">Preço (R$/KG)</string>
+    <string name="btn_schedule">Agendar Carneação</string>
+    <string name="btn_already_scheduled">Carneação Agendada ✓</string>
+    <string name="btn_cancel_schedule">Cancelar Agendamento</string>
+    <string name="btn_call_producer">Chamar Produtor</string>
+    <string name="btn_location">Localização</string>
+
+    <!-- RF10 — finalização do evento e avaliação pós-evento -->
+    <string name="btn_finalize_event">Finalizar Evento</string>
+    <string name="finalize_confirm_title">Finalizar Evento</string>
+    <string name="finalize_confirm_message">Isso marca a carneação como realizada e libera a avaliação pros compradores. Você pode escolher até 3 fotos do evento pra mostrar na tela — se preferir, também dá pra finalizar sem foto nenhuma.</string>
+    <string name="btn_choose_photos_and_finalize">Escolher Fotos e Finalizar</string>
+    <string name="btn_finalize_without_photos">Finalizar Sem Fotos</string>
+    <string name="label_event_finalized">Carneação Realizada ✓</string>
+    <string name="label_event_photos">Fotos da Carneação</string>
+    <string name="label_rate_participants">Avaliar Compradores</string>
+    <string name="btn_rate">Avaliar</string>
+    <string name="label_already_rated">Avaliado ✓</string>
+    <string name="btn_rate_producer">Avaliar Produtor</string>
+    <string name="rate_producer_message">Como foi a carneação?</string>
+    <string name="rate_client_message">Como foi participar com esse comprador?</string>
+    <string name="toast_event_finalized">Evento finalizado! Agora você já pode avaliar os compradores.</string>
+    <string name="toast_rating_sent">Avaliação enviada!</string>
+
+    <!-- Chat -->
+    <string name="chat_hint_message">Escreva uma mensagem…</string>
+
+    <!-- Profile -->
+    <string name="btn_edit_profile">Editar Perfil</string>
+    <string name="participation_history">Histórico de Participações</string>
+    <string name="label_my_finalized_events">Meus Eventos Finalizados</string>
+
+    <!-- Bottom nav -->
+    <string name="nav_home">Eventos</string>
+    <string name="nav_profile">Perfil</string>
+
+    <!-- Google Maps key placeholder — trocar pela chave real do Google Cloud Console -->
+    <string name="google_maps_key" translatable="false">SUA_CHAVE_GOOGLE_MAPS_AQUI</string>
+</resources>
