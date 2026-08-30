@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.conexaotradicao.app.MainActivity
@@ -23,6 +24,9 @@ import com.conexaotradicao.app.MainActivity
  */
 object NotificationHelper {
     const val CHANNEL_ID = "conexao_tradicao_default"
+
+    // RF11 — mesma tag de depuração do ChatNotifier (ver ali o motivo).
+    private const val TAG_RF11_DEBUG = "RF11_DEBUG"
 
     fun ensureChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -44,7 +48,16 @@ object NotificationHelper {
         val hasPermission = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
                 PackageManager.PERMISSION_GRANTED
-        if (!hasPermission) return
+        if (!hasPermission) {
+            // Esse é o suspeito nº 1 do "não tá tendo notificação": no Android 13+
+            // (TIRAMISU) sem a permissão POST_NOTIFICATIONS concedida, a notificação é
+            // descartada bem aqui, sem erro nenhum em lugar nenhum — por isso parecia
+            // "silencioso". Se essa linha aparecer no Logcat, o código está funcionando
+            // certinho até aqui; falta só a permissão (Configurações → Apps → Conexão &
+            // Tradição → Notificações) ou o modo Não Perturbe do sistema.
+            Log.w(TAG_RF11_DEBUG, "showNotification($notificationId) ABORTADA: sem permissão POST_NOTIFICATIONS (SDK=${Build.VERSION.SDK_INT})")
+            return
+        }
 
         val contentIntent = PendingIntent.getActivity(
             context,
@@ -65,5 +78,6 @@ object NotificationHelper {
 
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.notify(notificationId, notification)
+        Log.i(TAG_RF11_DEBUG, "showNotification($notificationId): manager.notify() chamado com sucesso — title=\"$title\"")
     }
 }

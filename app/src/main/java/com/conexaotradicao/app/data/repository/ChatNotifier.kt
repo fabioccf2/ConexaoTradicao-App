@@ -1,6 +1,7 @@
 package com.conexaotradicao.app.data.repository
 
 import android.content.Context
+import android.util.Log
 import com.conexaotradicao.app.data.model.Event
 import com.conexaotradicao.app.ui.chat.ChatScreenTracker
 import com.conexaotradicao.app.util.Constants
@@ -26,6 +27,16 @@ class ChatNotifier(
     private val currentUserId: String,
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 ) {
+    companion object {
+        // RF11 — tag temporária de depuração pro bug de notificação de chat não aparecendo
+        // (usuário relatou "não tá tendo notificação entre mensagens"). Filtrar por essa tag
+        // no Logcat revela cada etapa: se o listener foi criado, se a mensagem chegou, se foi
+        // ignorada de propósito (é minha própria mensagem / conversa já aberta na tela) ou se
+        // a notificação foi de fato disparada mas não apareceu (aí o problema é permissão/
+        // Não Perturbe do sistema, não o código).
+        private const val TAG_RF11_DEBUG = "RF11_DEBUG"
+    }
+
     // Dispatchers.Main de propósito: start()/stop() só são chamados a partir do ciclo de
     // vida da Activity (thread principal), então mantendo tudo na Main evitamos condição de
     // corrida na lista de registrations sem precisar de sincronização manual.
@@ -35,12 +46,16 @@ class ChatNotifier(
     private val sessionStartMillis = System.currentTimeMillis()
 
     fun start() {
+        Log.i(TAG_RF11_DEBUG, "start() chamado — uid=$currentUserId, sessionStartMillis=$sessionStartMillis")
         stop()
         job = Job()
         scope = CoroutineScope(Dispatchers.Main.immediate + job)
 
         scope.launch {
-            val chats = runCatching { findMyChats() }.getOrDefault(emptyMap())
+            val chats = runCatching { findMyChats() }
+                .onFailure { e -> Log.e(TAG_RF11_DEBUG, "findMyChats() lançou exceção", e) }
+                .getOrDefault(emptyMap())
+            Log.i(TAG_RF11_DEBUG, "findMyChats() achou ${chats.size} conversa(s): $chats")
             chats.forEach { (eventId, label) -> attachListener(eventId, label) }
         }
     }
@@ -84,18 +99,43 @@ class ChatNotifier(
     }
 
     private fun attachListener(eventId: String, label: String) {
+        Log.i(TAG_RF11_DEBUG, "attachListener(eventId=$eventId, label=$label)")
         val registration = firestore.collection(Constants.COLLECTION_CHATS)
             .document(eventId)
             .collection("messages")
             .whereGreaterThan("timestampMillis", sessionStartMillis)
-            .addSnapshotListener { snapshot, _ ->
-                snapshot?.documentChanges?.forEach { change ->
-                    if (change.type != DocumentChange.Type.ADDED) return@forEach
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    // Antes esse erro era descartado silenciosamente (segundo parâmetro do
+                    // listener ignorado como "_") — se o Firestore recusar o listener por
+                    // qualquer motivo (regra de segurança, índice faltando etc.), o app
+                    // simplesmente nunca soube, e nunca ia notificar nada dessa conversa.
+                    Log.e(TAG_RF11_DEBUG, "listener de $eventId falhou", error)
+                    return@addSnapshotListener
+                }
+                val changes = snapshot?.documentChanges.orEmpty()
+                Log.i(TAG_RF11_DEBUG, "listener de $eventId disparou — ${changes.size} mudança(s)")
+                changes.forEach { change ->
+                    if (change.type != DocumentChange.Type.ADDED) {
+                        Log.i(TAG_RF11_DEBUG, "  ignorado: tipo=${change.type} (não é mensagem nova)")
+                        return@forEach
+                    }
                     val senderId = change.document.getString("senderId")
-                    val text = change.document.getString("text") ?: return@forEach
-                    if (senderId == currentUserId) return@forEach
-                    if (ChatScreenTracker.openConversationId == eventId) return@forEach
+                    val text = change.document.getString("text")
+                    if (text == null) {
+                        Log.w(TAG_RF11_DEBUG, "  ignorado: documento ${change.document.id} sem campo 'text'")
+                        return@forEach
+                    }
+                    if (senderId == currentUserId) {
+                        Log.i(TAG_RF11_DEBUG, "  ignorado: mensagem é minha própria (senderId=$senderId)")
+                        return@forEach
+                    }
+                    if (ChatScreenTracker.openConversationId == eventId) {
+                        Log.i(TAG_RF11_DEBUG, "  ignorado: conversa $eventId já está aberta na tela")
+                        return@forEach
+                    }
 
+                    Log.i(TAG_RF11_DEBUG, "  disparando notificação: label=$label texto=\"$text\"")
                     NotificationHelper.showNotification(
                         context = context,
                         notificationId = eventId.hashCode(),
