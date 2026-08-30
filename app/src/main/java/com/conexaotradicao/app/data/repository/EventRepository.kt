@@ -363,6 +363,47 @@ class EventRepository(
         }
     }
 
+    /**
+     * Excluir Evento (só o produtor dono vê o botão, ver EventDetailFragment): ação sem
+     * volta, apaga o evento inteiro — cortes/preços e todos os agendamentos/histórico
+     * ligados a ele, de qualquer status (AGENDADO, CONCLUIDO ou CANCELADO), já que nenhum
+     * deles faz sentido sem o evento que os originou. As avaliações (`Rating`) já gravadas
+     * não são desfeitas: já entraram no cálculo da média de quem foi avaliado, apagar o
+     * registro delas não mudaria a nota de ninguém agora, só perderia o histórico.
+     *
+     * Local (Room) primeiro — o evento já some da Home na hora, mesmo sem internet — e só
+     * depois o Firestore, best-effort (mesmo padrão do resto do repositório): se a conexão
+     * cair no meio, a exclusão local já valeu e o usuário não fica travado numa tela de
+     * evento que ele acabou de apagar.
+     */
+    suspend fun deleteEvent(eventId: String, requesterId: String): Result<Unit> = runCatching {
+        val event = eventDao.getById(eventId) ?: throw IllegalStateException("Evento não encontrado.")
+        if (event.producerId != requesterId) {
+            throw IllegalStateException("Só o produtor dono do evento pode excluí-lo.")
+        }
+
+        participationDao.deleteByEvent(eventId)
+        eventDao.deleteCutsByEvent(eventId)
+        eventDao.deleteById(eventId)
+
+        runCatching {
+            for (participation in fetchParticipationsForEvent(eventId)) {
+                firestore.collection(Constants.COLLECTION_PARTICIPATIONS)
+                    .document(participation.id)
+                    .delete()
+                    .await()
+            }
+            val cutsSnapshot = firestore.collection(Constants.COLLECTION_EVENTS)
+                .document(eventId)
+                .collection(Constants.COLLECTION_CUTS)
+                .get()
+                .await()
+            for (cutDoc in cutsSnapshot.documents) cutDoc.reference.delete().await()
+
+            firestore.collection(Constants.COLLECTION_EVENTS).document(eventId).delete().await()
+        }
+    }
+
     suspend fun refresh(): Result<Unit> = runCatching {
         val snapshot = firestore.collection(Constants.COLLECTION_EVENTS).get().await()
         val events = snapshot.toObjects(Event::class.java)

@@ -32,4 +32,10 @@ interface ParticipationDao {
     /** RF07 — cancelar um agendamento. */
     @Delete
     suspend fun delete(participation: Participation)
+
+    /** Excluir Evento (produtor): apaga de uma vez todos os agendamentos/histórico ligados a
+     * um evento que deixou de existir — não faz sentido manter participação presa a um
+     * evento apagado. */
+    @Query("DELETE FROM participations WHERE eventId = :eventId")
+    suspend fun deleteByEvent(eventId: String)
 }

@@ -44,6 +44,12 @@
     <string name="toast_event_finalized">Evento finalizado! Agora você já pode avaliar os compradores.</string>
     <string name="toast_rating_sent">Avaliação enviada!</string>
 
+    <!-- Excluir Evento — só o produtor dono do evento vê o botão -->
+    <string name="btn_delete_event">Excluir Evento</string>
+    <string name="delete_event_confirm_title">Excluir Evento</string>
+    <string name="delete_event_confirm_message">Essa ação é permanente: o evento, seus cortes/preços e todos os agendamentos (inclusive já concluídos) ligados a ele vão ser apagados. Não pode ser desfeita.</string>
+    <string name="toast_event_deleted">Evento excluído.</string>
+
     <!-- Chat -->
     <string name="chat_hint_message">Escreva uma mensagem…</string>
 

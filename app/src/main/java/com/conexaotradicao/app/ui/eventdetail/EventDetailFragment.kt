@@ -170,6 +170,20 @@ class EventDetailFragment : Fragment() {
             }
         }
 
+        // "Excluir Evento" (produtor) — some da Home e do Firestore junto com os
+        // agendamentos/histórico ligados a ele; a tela não faz mais sentido depois disso,
+        // então volta pra trás assim que confirma.
+        viewModel.deleteState.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    Toast.makeText(requireContext(), getString(R.string.toast_event_deleted), Toast.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                }
+                is Resource.Error -> Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                else -> Unit
+            }
+        }
+
         // Já agendado? (mesmo flag usado pra liberar Localização, RNF05) — troca o texto/estado
         // do botão de agendar e mostra o botão de cancelar.
         viewModel.locationUnlocked.observe(viewLifecycleOwner) { updateScheduleButtonState() }
@@ -182,6 +196,9 @@ class EventDetailFragment : Fragment() {
 
         // RF10 — botão "Finalizar Evento" (só o produtor dono do evento vê).
         binding.btnFinalizeEvent.setOnClickListener { showFinalizeConfirmDialog() }
+
+        // "Excluir Evento" (só o produtor dono do evento vê, em qualquer estado).
+        binding.btnDeleteEvent.setOnClickListener { showDeleteConfirmDialog() }
 
         // RF10 — botão "Avaliar Produtor" (só o comprador vê, depois de finalizado).
         binding.btnRateProducer.setOnClickListener {
@@ -274,6 +291,10 @@ class EventDetailFragment : Fragment() {
         binding.btnFinalizeEvent.visibility =
             if (isProducer && !event.finalized) View.VISIBLE else View.GONE
 
+        // Excluir Evento — só o produtor dono vê, em qualquer estado (finalizado ou não),
+        // pra sempre conseguir apagar um evento de teste/engano.
+        binding.btnDeleteEvent.visibility = if (isProducer) View.VISIBLE else View.GONE
+
         val hasPhotos = event.finalized && event.photoBase64List.isNotEmpty()
         binding.photosTitle.visibility = if (hasPhotos) View.VISIBLE else View.GONE
         binding.photosScroll.visibility = if (hasPhotos) View.VISIBLE else View.GONE
@@ -336,6 +357,17 @@ class EventDetailFragment : Fragment() {
             }
             viewModel.finalizeEvent(encoded)
         }
+    }
+
+    /** Confirma antes de excluir o evento (ação sem volta: apaga o evento, os cortes/preços e
+     * todos os agendamentos/histórico ligados a ele). */
+    private fun showDeleteConfirmDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.delete_event_confirm_title))
+            .setMessage(getString(R.string.delete_event_confirm_message))
+            .setPositiveButton(getString(R.string.btn_delete_event)) { _, _ -> viewModel.deleteEvent() }
+            .setNegativeButton("Cancelar", null)
+            .show()
     }
 
     /** RF10 — diálogo de avaliação em estrelas, reaproveitado tanto pro comprador avaliar o

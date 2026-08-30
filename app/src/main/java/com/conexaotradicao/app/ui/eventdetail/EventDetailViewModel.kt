@@ -38,6 +38,10 @@ class EventDetailViewModel(
     private val _rateState = MutableLiveData<Resource<Unit>>()
     val rateState: LiveData<Resource<Unit>> = _rateState
 
+    /** Excluir Evento (produtor). */
+    private val _deleteState = MutableLiveData<Resource<Unit>>()
+    val deleteState: LiveData<Resource<Unit>> = _deleteState
+
     /** A participação do usuário logado nesse evento (se comprador e já tiver agendado) —
      * usado tanto pra saber se já foi avaliada (botão "Avaliar Produtor") quanto o status
      * (AGENDADO/CONCLUIDO/CANCELADO). */
@@ -196,6 +200,24 @@ class EventDetailViewModel(
                 refreshLocationUnlocked()
                 refreshMyParticipation()
             }
+        }
+    }
+
+    /** Botão "Excluir Evento" (só o produtor dono do evento vê): ação sem volta, apaga o
+     * evento, seus cortes/preços e todos os agendamentos/histórico ligados a ele. */
+    fun deleteEvent() {
+        val userId = currentUserId
+        if (userId == null) {
+            _deleteState.value = Resource.Error("Você precisa estar logado para excluir.")
+            return
+        }
+        _deleteState.value = Resource.Loading
+        viewModelScope.launch {
+            val result = eventRepository.deleteEvent(eventId, userId)
+            _deleteState.value = result.fold(
+                onSuccess = { Resource.Success(Unit) },
+                onFailure = { Resource.Error(it.message ?: "Não foi possível excluir o evento.", it) }
+            )
         }
     }
 

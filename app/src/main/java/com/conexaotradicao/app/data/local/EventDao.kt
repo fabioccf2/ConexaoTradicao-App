@@ -52,4 +52,11 @@ interface EventDao {
      * compradores que ainda faltavam ou rever as fotos. */
     @Query("SELECT * FROM events WHERE producerId = :producerId AND finalized = 1 ORDER BY dateMillis DESC")
     fun observeFinalizedByProducer(producerId: String): Flow<List<Event>>
+
+    /** Excluir Evento (produtor): remove o evento e seus cortes/preços do cache local. */
+    @Query("DELETE FROM events WHERE id = :eventId")
+    suspend fun deleteById(eventId: String)
+
+    @Query("DELETE FROM cuts WHERE eventId = :eventId")
+    suspend fun deleteCutsByEvent(eventId: String)
 }
