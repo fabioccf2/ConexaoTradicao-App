@@ -43,10 +43,9 @@ class ChatNotifier(
     private var job = Job()
     private var scope = CoroutineScope(Dispatchers.Main.immediate + job)
     private val registrations = mutableListOf<ListenerRegistration>()
-    private val sessionStartMillis = System.currentTimeMillis()
 
     fun start() {
-        Log.i(TAG_RF11_DEBUG, "start() chamado — uid=$currentUserId, sessionStartMillis=$sessionStartMillis")
+        Log.i(TAG_RF11_DEBUG, "start() chamado — uid=$currentUserId")
         stop()
         job = Job()
         scope = CoroutineScope(Dispatchers.Main.immediate + job)
@@ -100,10 +99,23 @@ class ChatNotifier(
 
     private fun attachListener(eventId: String, label: String) {
         Log.i(TAG_RF11_DEBUG, "attachListener(eventId=$eventId, label=$label)")
+        // RF11 — causa raiz encontrada: a versão anterior filtrava as mensagens com
+        // .whereGreaterThan("timestampMillis", sessionStartMillis), comparando o relógio de
+        // quem MANDA a mensagem (timestampMillis é System.currentTimeMillis() de quem envia,
+        // ver ChatRepository.send()) com o relógio de quem RECEBE (sessionStartMillis, capturado
+        // aqui). Dois emuladores quase nunca têm o relógio perfeitamente sincronizado — aí o
+        // Firestore aplicava esse filtro no SERVIDOR e descartava a mensagem antes mesmo dela
+        // chegar no listener, sem erro nenhum. Por isso a tela de Chat (que não tem esse filtro)
+        // recebia tudo em tempo real, mas o ChatNotifier ficava cego.
+        //
+        // Correção: não comparar relógio de aparelhos diferentes. Em vez disso, trata a
+        // primeira leitura do listener como "essas mensagens já existiam antes de eu abrir o
+        // app" (não notifica nada) e só notifica a partir da segunda leitura em diante — só
+        // isso já garante "é mensagem nova" sem depender de nenhum timestamp.
+        var isFirstSnapshot = true
         val registration = firestore.collection(Constants.COLLECTION_CHATS)
             .document(eventId)
             .collection("messages")
-            .whereGreaterThan("timestampMillis", sessionStartMillis)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     // Antes esse erro era descartado silenciosamente (segundo parâmetro do
@@ -114,6 +126,11 @@ class ChatNotifier(
                     return@addSnapshotListener
                 }
                 val changes = snapshot?.documentChanges.orEmpty()
+                if (isFirstSnapshot) {
+                    isFirstSnapshot = false
+                    Log.i(TAG_RF11_DEBUG, "listener de $eventId: carga inicial com ${changes.size} mensagem(ns) já existente(s) — não notifica")
+                    return@addSnapshotListener
+                }
                 Log.i(TAG_RF11_DEBUG, "listener de $eventId disparou — ${changes.size} mudança(s)")
                 changes.forEach { change ->
                     if (change.type != DocumentChange.Type.ADDED) {
