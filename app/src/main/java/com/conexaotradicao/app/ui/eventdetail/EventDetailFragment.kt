@@ -1,6 +1,7 @@
 package com.conexaotradicao.app.ui.eventdetail
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -271,6 +273,20 @@ class EventDetailFragment : Fragment() {
         binding.btnSchedule.text =
             if (scheduled) getString(R.string.btn_already_scheduled)
             else getString(R.string.btn_schedule)
+
+        // Esse botão fica desabilitado (isEnabled = false) depois de agendado — sem essa cor
+        // fixa, o Material Design escurece sozinho o texto de botão desabilitado (padrão do
+        // tema, ~38% de opacidade em cima de colorOnSurface), o que em cima do fundo marrom
+        // escuro do botão ficava praticamente ilegível ("sem nada escrito"). Fixando a cor do
+        // texto e do fundo na mão, ignoramos esse efeito automático: agendado fica com fundo
+        // verde e texto branco bem visível; não agendado volta ao marrom padrão do botão.
+        val scheduleBackgroundColor = ContextCompat.getColor(
+            requireContext(),
+            if (scheduled) R.color.moss_green_dark else R.color.coffee_brown
+        )
+        binding.btnSchedule.backgroundTintList = ColorStateList.valueOf(scheduleBackgroundColor)
+        binding.btnSchedule.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+
         binding.btnCancelSchedule.isEnabled = !loading
         binding.btnCancelSchedule.visibility = if (scheduled) View.VISIBLE else View.GONE
     }
