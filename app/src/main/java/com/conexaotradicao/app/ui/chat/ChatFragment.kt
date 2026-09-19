@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.conexaotradicao.app.data.repository.RepositoryProvider
 import com.conexaotradicao.app.databinding.FragmentChatBinding
+import com.conexaotradicao.app.util.ChatScreenTracker
 import com.google.firebase.auth.FirebaseAuth
 
 /** Tela 4 — Chat com o Produtor (RF08). */

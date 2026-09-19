@@ -3,7 +3,7 @@ package com.conexaotradicao.app.data.repository
 import android.content.Context
 import android.util.Log
 import com.conexaotradicao.app.data.model.Event
-import com.conexaotradicao.app.ui.chat.ChatScreenTracker
+import com.conexaotradicao.app.util.ChatScreenTracker
 import com.conexaotradicao.app.util.Constants
 import com.conexaotradicao.app.util.NotificationHelper
 import com.google.firebase.firestore.DocumentChange
